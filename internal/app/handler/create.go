@@ -6,6 +6,7 @@ import (
 	stor "github.com/belikoooova/url-shortener/internal/app/storage"
 	"io"
 	"net/http"
+	"strings"
 )
 
 type CreateHandler struct {
@@ -23,27 +24,27 @@ func (h CreateHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if r.Header.Get("Content-Type") != "text/plain" {
+	if !strings.Contains(r.Header.Get("Content-Type"), "text/plain") {
 		w.WriteHeader(http.StatusUnsupportedMediaType)
 		return
 	}
 
-	originalUrlBytes, err := io.ReadAll(r.Body)
+	originalURLBytes, err := io.ReadAll(r.Body)
 	if err != nil {
 		w.WriteHeader(http.StatusBadRequest)
 		return
 	}
-	originalUrl := string(originalUrlBytes)
+	originalURL := string(originalURLBytes)
 
-	hash, err := h.shortener.Shorten(originalUrl)
+	hash, err := h.shortener.Shorten(originalURL)
 	if err != nil {
 		w.WriteHeader(http.StatusBadRequest)
 		return
 	}
-	url := m.Url{Id: hash, OriginalUrl: originalUrl, ShortUrl: m.BaseUrl + hash}
+	URL := m.URL{ID: hash, OriginalURL: originalURL, ShortURL: m.BaseURL + hash}
 
-	var savedUrl *m.Url
-	savedUrl, err = h.storage.Save(url)
+	var savedURL *m.URL
+	savedURL, err = h.storage.Save(URL)
 	if err != nil {
 		w.WriteHeader(http.StatusBadRequest)
 		return
@@ -51,7 +52,7 @@ func (h CreateHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 
 	w.Header().Add("Content-Type", "text/plain")
 	w.WriteHeader(http.StatusCreated)
-	_, err = w.Write([]byte(savedUrl.ShortUrl))
+	_, err = w.Write([]byte(savedURL.ShortURL))
 	if err != nil {
 		w.WriteHeader(http.StatusBadRequest)
 		return

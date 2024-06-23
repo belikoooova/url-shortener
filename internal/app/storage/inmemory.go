@@ -6,25 +6,25 @@ import (
 )
 
 type InMemoryStorage struct {
-	urlForId map[string]m.Url
+	urlForID map[string]m.URL
 }
 
 func NewInMemoryStorage() *InMemoryStorage {
-	return &InMemoryStorage{urlForId: make(map[string]m.Url)}
+	return &InMemoryStorage{urlForID: make(map[string]m.URL)}
 }
 
-func (s *InMemoryStorage) Save(url m.Url) (*m.Url, error) {
-	foundUrl, ok := s.urlForId[url.Id]
-	if ok && foundUrl.OriginalUrl != url.OriginalUrl {
+func (s *InMemoryStorage) Save(url m.URL) (*m.URL, error) {
+	foundURL, ok := s.urlForID[url.ID]
+	if ok && foundURL.OriginalURL != url.OriginalURL {
 		return nil, errors.New("short url already exists")
 	}
 
-	s.urlForId[url.Id] = url
+	s.urlForID[url.ID] = url
 	return &url, nil
 }
 
-func (s *InMemoryStorage) FindById(id string) (*m.Url, error) {
-	url, ok := s.urlForId[id]
+func (s *InMemoryStorage) FindByID(id string) (*m.URL, error) {
+	url, ok := s.urlForID[id]
 	if ok {
 		return &url, nil
 	}

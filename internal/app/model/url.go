@@ -1,9 +1,9 @@
 package model
 
-const BaseUrl = "http://localhost:8080/"
+const BaseURL = "http://localhost:8080/"
 
-type Url struct {
-	Id          string `json:"id"`
-	OriginalUrl string `json:"original_url"`
-	ShortUrl    string `json:"short_url"`
+type URL struct {
+	ID          string `json:"id"`
+	OriginalURL string `json:"original_url"`
+	ShortURL    string `json:"short_url"`
 }
