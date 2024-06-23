@@ -46,7 +46,7 @@ func (h CreateHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	var savedURL *m.URL
 	savedURL, err = h.storage.Save(URL)
 	if err != nil {
-		w.WriteHeader(http.StatusBadRequest)
+		w.WriteHeader(http.StatusConflict)
 		return
 	}
 
@@ -54,7 +54,6 @@ func (h CreateHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusCreated)
 	_, err = w.Write([]byte(savedURL.ShortURL))
 	if err != nil {
-		w.WriteHeader(http.StatusBadRequest)
 		return
 	}
 }

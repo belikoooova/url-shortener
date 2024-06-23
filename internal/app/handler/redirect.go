@@ -21,10 +21,13 @@ func (h *RedirectHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 
 	id := r.URL.Path[1:len(r.URL.Path)]
 	url, err := h.Storage.FindByID(id)
+	if err != nil {
+		w.WriteHeader(http.StatusNotFound)
+	}
+
 	w.Header().Add("Location", url.OriginalURL)
 	w.WriteHeader(http.StatusTemporaryRedirect)
 	if err != nil {
-		w.WriteHeader(http.StatusBadRequest)
 		return
 	}
 }
