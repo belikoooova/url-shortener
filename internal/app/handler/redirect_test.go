@@ -26,7 +26,7 @@ func TestRedirectHandler_ServeHTTP(t *testing.T) {
 		number   int
 		name     string
 		method   string
-		shortUrl string
+		shortURL string
 		storage  *mock.MockStorage
 		want     redirectWant
 	}{
@@ -34,7 +34,7 @@ func TestRedirectHandler_ServeHTTP(t *testing.T) {
 			number:   1,
 			name:     "passed right parameters expected correct answer",
 			method:   http.MethodGet,
-			shortUrl: "/good",
+			shortURL: "/good",
 			storage:  mockStorage,
 			want: redirectWant{
 				code:           http.StatusTemporaryRedirect,
@@ -45,7 +45,7 @@ func TestRedirectHandler_ServeHTTP(t *testing.T) {
 			number:   2,
 			name:     "passed unknown url expected status not found",
 			method:   http.MethodGet,
-			shortUrl: "/unknown",
+			shortURL: "/unknown",
 			storage:  mockStorage,
 			want: redirectWant{
 				code:           http.StatusNotFound,
@@ -56,7 +56,7 @@ func TestRedirectHandler_ServeHTTP(t *testing.T) {
 			number:   3,
 			name:     "passed wrong method expected status method not allowed",
 			method:   http.MethodPost,
-			shortUrl: "/good",
+			shortURL: "/good",
 			storage:  mockStorage,
 			want: redirectWant{
 				code:           http.StatusMethodNotAllowed,
@@ -75,7 +75,7 @@ func TestRedirectHandler_ServeHTTP(t *testing.T) {
 
 		handler := NewRedirectHandler(tt.storage)
 
-		req, err := http.NewRequest(tt.method, tt.shortUrl, nil)
+		req, err := http.NewRequest(tt.method, tt.shortURL, nil)
 		if err != nil {
 			t.Fatalf("could not create request: %v", err)
 		}
