@@ -5,6 +5,8 @@ import (
 	"net/http"
 )
 
+const locationHeader = "Location"
+
 type RedirectHandler struct {
 	stor.Storage
 }
@@ -23,11 +25,9 @@ func (h *RedirectHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	url, err := h.Storage.FindByID(id)
 	if err != nil {
 		w.WriteHeader(http.StatusNotFound)
-	}
-
-	w.Header().Add("Location", url.OriginalURL)
-	w.WriteHeader(http.StatusTemporaryRedirect)
-	if err != nil {
 		return
 	}
+
+	w.Header().Add(locationHeader, url.OriginalURL)
+	w.WriteHeader(http.StatusTemporaryRedirect)
 }
