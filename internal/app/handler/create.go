@@ -19,11 +19,6 @@ func NewCreateHandler(storage stor.Storage, shortener short.Shortener) *CreateHa
 }
 
 func (h CreateHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	if r.Method != http.MethodPost {
-		w.WriteHeader(http.StatusMethodNotAllowed)
-		return
-	}
-
 	if !strings.Contains(r.Header.Get("Content-Type"), "text/plain") {
 		w.WriteHeader(http.StatusUnsupportedMediaType)
 		return

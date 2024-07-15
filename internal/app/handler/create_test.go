@@ -2,7 +2,7 @@ package handler
 
 import (
 	"errors"
-	mock "github.com/belikoooova/url-shortener/internal/app/mock"
+	"github.com/belikoooova/url-shortener/internal/app/mock"
 	"github.com/belikoooova/url-shortener/internal/app/model"
 	"github.com/golang/mock/gomock"
 	"github.com/stretchr/testify/assert"
@@ -53,19 +53,6 @@ func TestCreateHandler_ServeHTTP(t *testing.T) {
 		},
 		{
 			number:            2,
-			name:              "passed wrong method expected status method not allowed",
-			method:            http.MethodGet,
-			contentTypeHeader: "text/plain",
-			body:              "http://example.com/long",
-			storage:           mockStorage,
-			shortener:         mockShortener,
-			want: createWant{
-				code: http.StatusMethodNotAllowed,
-				url:  model.URL{},
-			},
-		},
-		{
-			number:            3,
 			name:              "passed wrong media type expected status unsupported media type",
 			method:            http.MethodPost,
 			contentTypeHeader: "application/json",
@@ -78,7 +65,7 @@ func TestCreateHandler_ServeHTTP(t *testing.T) {
 			},
 		},
 		{
-			number:            4,
+			number:            3,
 			name:              "passed bad shortener expected error while shortening and status bad request",
 			method:            http.MethodPost,
 			contentTypeHeader: "text/plain",
@@ -91,7 +78,7 @@ func TestCreateHandler_ServeHTTP(t *testing.T) {
 			},
 		},
 		{
-			number:            5,
+			number:            4,
 			name:              "passed bad storage expected error while saving and status conflict",
 			method:            http.MethodPost,
 			contentTypeHeader: "text/plain",
@@ -114,9 +101,9 @@ func TestCreateHandler_ServeHTTP(t *testing.T) {
 		case 1:
 			tt.shortener.EXPECT().Shorten(tt.body).Return(tt.want.url.ID, nil)
 			tt.storage.EXPECT().Save(tt.want.url).Return(&tt.want.url, nil)
-		case 4:
+		case 3:
 			tt.shortener.EXPECT().Shorten(tt.body).Return("", errors.New("error while shortening url"))
-		case 5:
+		case 4:
 			tt.shortener.EXPECT().Shorten(tt.body).Return(tt.want.url.ID, nil)
 			tt.storage.EXPECT().Save(tt.want.url).Return(nil, errors.New("error while saving url"))
 		}
