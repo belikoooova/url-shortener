@@ -2,6 +2,7 @@ package handler
 
 import (
 	"errors"
+	"github.com/belikoooova/url-shortener/cmd/shortener/config"
 	"github.com/belikoooova/url-shortener/internal/app/mock"
 	"github.com/belikoooova/url-shortener/internal/app/model"
 	"github.com/golang/mock/gomock"
@@ -46,7 +47,7 @@ func TestCreateHandler_ServeHTTP(t *testing.T) {
 				code: http.StatusCreated,
 				url: model.URL{
 					OriginalURL: "http://example.com/long",
-					ShortURL:    "http://localhost:8080/short",
+					ShortURL:    "localhost:8080/short",
 					ID:          "short",
 				},
 			},
@@ -89,7 +90,7 @@ func TestCreateHandler_ServeHTTP(t *testing.T) {
 				code: http.StatusConflict,
 				url: model.URL{
 					OriginalURL: "http://example.com/long",
-					ShortURL:    "http://localhost:8080/short",
+					ShortURL:    "localhost:8080/short",
 					ID:          "short",
 				},
 			},
@@ -108,7 +109,7 @@ func TestCreateHandler_ServeHTTP(t *testing.T) {
 			tt.storage.EXPECT().Save(tt.want.url).Return(nil, errors.New("error while saving url"))
 		}
 
-		handler := NewCreateHandler(tt.storage, tt.shortener)
+		handler := NewCreateHandler(tt.storage, tt.shortener, config.Config{RedirectServerAddress: "localhost:8080"})
 
 		req, err := http.NewRequest(tt.method, "http://localhost:8080", strings.NewReader(tt.body))
 		if err != nil {
