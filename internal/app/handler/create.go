@@ -1,6 +1,7 @@
 package handler
 
 import (
+	"github.com/belikoooova/url-shortener/cmd/shortener/config"
 	m "github.com/belikoooova/url-shortener/internal/app/model"
 	short "github.com/belikoooova/url-shortener/internal/app/shortener"
 	stor "github.com/belikoooova/url-shortener/internal/app/storage"
@@ -12,10 +13,11 @@ import (
 type CreateHandler struct {
 	storage   stor.Storage
 	shortener short.Shortener
+	cfg       config.Config
 }
 
-func NewCreateHandler(storage stor.Storage, shortener short.Shortener) *CreateHandler {
-	return &CreateHandler{storage: storage, shortener: shortener}
+func NewCreateHandler(storage stor.Storage, shortener short.Shortener, cfg config.Config) *CreateHandler {
+	return &CreateHandler{storage: storage, shortener: shortener, cfg: cfg}
 }
 
 func (h CreateHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
@@ -36,7 +38,7 @@ func (h CreateHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusBadRequest)
 		return
 	}
-	URL := m.URL{ID: hash, OriginalURL: originalURL, ShortURL: m.BaseURL + hash}
+	URL := m.URL{ID: hash, OriginalURL: originalURL, ShortURL: h.cfg.RedirectServerAddress + "/" + hash}
 
 	var savedURL *m.URL
 	savedURL, err = h.storage.Save(URL)
