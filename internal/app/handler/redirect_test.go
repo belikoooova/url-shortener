@@ -2,8 +2,9 @@ package handler
 
 import (
 	"errors"
-	mock "github.com/belikoooova/url-shortener/internal/app/mock"
+	"github.com/belikoooova/url-shortener/internal/app/mock"
 	"github.com/belikoooova/url-shortener/internal/app/model"
+	"github.com/go-chi/chi/v5"
 	"github.com/golang/mock/gomock"
 	"github.com/stretchr/testify/assert"
 	"net/http"
@@ -52,17 +53,6 @@ func TestRedirectHandler_ServeHTTP(t *testing.T) {
 				locationHeader: "",
 			},
 		},
-		{
-			number:   3,
-			name:     "passed wrong method expected status method not allowed",
-			method:   http.MethodPost,
-			shortURL: "/good",
-			storage:  mockStorage,
-			want: redirectWant{
-				code:           http.StatusMethodNotAllowed,
-				locationHeader: "",
-			},
-		},
 	}
 
 	for _, tt := range tests {
@@ -74,6 +64,8 @@ func TestRedirectHandler_ServeHTTP(t *testing.T) {
 		}
 
 		handler := NewRedirectHandler(tt.storage)
+		r := chi.NewRouter()
+		r.Get("/{id}", handler.ServeHTTP)
 
 		req, err := http.NewRequest(tt.method, tt.shortURL, nil)
 		if err != nil {
@@ -82,7 +74,7 @@ func TestRedirectHandler_ServeHTTP(t *testing.T) {
 
 		rec := httptest.NewRecorder()
 
-		handler.ServeHTTP(rec, req)
+		r.ServeHTTP(rec, req)
 
 		assert.Equal(t, tt.want.code, rec.Code, "Failed test '%s'", tt.name)
 		assert.Equal(t, tt.want.locationHeader, rec.Header().Get("Location"), "Failed test '%s'", tt.name)

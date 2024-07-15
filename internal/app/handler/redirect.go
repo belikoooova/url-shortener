@@ -2,6 +2,7 @@ package handler
 
 import (
 	stor "github.com/belikoooova/url-shortener/internal/app/storage"
+	"github.com/go-chi/chi/v5"
 	"net/http"
 )
 
@@ -16,12 +17,7 @@ func NewRedirectHandler(storage stor.Storage) *RedirectHandler {
 }
 
 func (h *RedirectHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	if r.Method != http.MethodGet {
-		w.WriteHeader(http.StatusMethodNotAllowed)
-		return
-	}
-
-	id := r.URL.Path[1:len(r.URL.Path)]
+	id := chi.URLParam(r, "id")
 	url, err := h.Storage.FindByID(id)
 	if err != nil {
 		w.WriteHeader(http.StatusNotFound)
