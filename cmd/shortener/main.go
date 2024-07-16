@@ -10,16 +10,12 @@ import (
 )
 
 func main() {
-	config.ParseFlags()
-	cfg := config.Config{
-		AppRunServerAddress:   config.AppRunAddress,
-		RedirectServerAddress: config.RedirectAddress,
-	}
+	cfg := config.Configure()
 	var shortener short.Shortener = short.NewSha256WithBase58Shortener()
 	var storage stor.Storage = stor.NewInMemoryStorage()
 
-	go startAppServer(&storage, &shortener, &cfg)
-	go startRedirectServer(&storage, &cfg)
+	go startAppServer(&storage, &shortener, cfg)
+	go startRedirectServer(&storage, cfg)
 
 	select {}
 }
