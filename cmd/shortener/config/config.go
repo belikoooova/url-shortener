@@ -18,7 +18,7 @@ func Configure() *Config {
 }
 
 func getEnvOrDefault(key string, fallback string) string {
-	if value, ok := os.LookupEnv(key); ok {
+	if value, ok := os.LookupEnv(key); value != "" && ok {
 		return value
 	}
 	return fallback
