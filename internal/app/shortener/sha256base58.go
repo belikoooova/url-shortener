@@ -20,9 +20,7 @@ func (sh Sha256WithBase58Shortener) Shorten(url string) (string, error) {
 
 	algo := sha256.New()
 	algo.Write([]byte(url))
-	generatedNumber := new(big.Int).
-		SetBytes(algo.Sum(nil)).
-		Uint64()
+	generatedNumber := new(big.Int).SetBytes(algo.Sum(nil)).Uint64()
 
 	encoding := base58.BitcoinEncoding
 	encoded, err := encoding.Encode([]byte(fmt.Sprintf("%d", generatedNumber)))
