@@ -5,7 +5,7 @@ import "flag"
 var AppRunServerAddressFromFlag string
 var RedirectAddressFromFlag string
 
-const defaultAddr = "localhost:8080"
+const defaultAddr = "http://localhost:8080"
 
 func ParseFlags() {
 	flag.StringVar(&AppRunServerAddressFromFlag, "a", defaultAddr, "Address to listen for incoming requests")
