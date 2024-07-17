@@ -3,6 +3,7 @@ package main
 import (
 	"github.com/belikoooova/url-shortener/cmd/shortener/config"
 	h "github.com/belikoooova/url-shortener/internal/app/handler"
+	"github.com/belikoooova/url-shortener/internal/app/logger"
 	short "github.com/belikoooova/url-shortener/internal/app/shortener"
 	stor "github.com/belikoooova/url-shortener/internal/app/storage"
 	"github.com/go-chi/chi/v5"
@@ -17,13 +18,21 @@ func main() {
 	createHandler := h.NewCreateHandler(storage, shortener, *cfg)
 	redirectHandler := h.NewRedirectHandler(storage)
 
-	startGeneralServer(createHandler, redirectHandler, cfg.ServerAddress)
+	runLogger(cfg.LogLevel)
+	runServer(createHandler, redirectHandler, cfg.ServerAddress)
 }
 
-func startGeneralServer(createHandler *h.CreateHandler, redirectHandler *h.RedirectHandler, address string) {
+func runLogger(logLevel string) {
+	err := logger.Initialize(logLevel)
+	if err != nil {
+		panic(err)
+	}
+}
+
+func runServer(createHandler *h.CreateHandler, redirectHandler *h.RedirectHandler, address string) {
 	router := chi.NewRouter()
-	router.Post("/", createHandler.ServeHTTP)
-	router.Get("/{id}", redirectHandler.ServeHTTP)
+	router.Post("/", logger.WithLogging(createHandler).ServeHTTP)
+	router.Get("/{id}", logger.WithLogging(redirectHandler).ServeHTTP)
 	err := http.ListenAndServe(address, router)
 	if err != nil {
 		panic(err)

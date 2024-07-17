@@ -2,21 +2,27 @@ package config
 
 import "flag"
 
-var ServerAddressFromFlag string
-var BaseURLFromFlag string
+var FlagServerAddress string
+var FlagBaseURL string
+var FlagLogLevel string
 
 const defaultServerAddress = "localhost:8080"
 const defaultBaseURL = "http://localhost:8080"
+const defaultLogLevel = "info"
 
 func ParseFlags() {
-	flag.StringVar(&ServerAddressFromFlag, "a", defaultServerAddress, "Server address")
-	flag.StringVar(&BaseURLFromFlag, "b", defaultBaseURL, "Base url before shortened url")
+	flag.StringVar(&FlagServerAddress, "a", defaultServerAddress, "Server address")
+	flag.StringVar(&FlagBaseURL, "b", defaultBaseURL, "Base url before shortened url")
+	flag.StringVar(&FlagLogLevel, "l", defaultLogLevel, "Logging level")
 	flag.Parse()
 
-	if ServerAddressFromFlag == "" {
-		ServerAddressFromFlag = defaultServerAddress
+	if FlagServerAddress == "" {
+		FlagServerAddress = defaultServerAddress
 	}
-	if BaseURLFromFlag == "" {
-		BaseURLFromFlag = defaultBaseURL
+	if FlagBaseURL == "" {
+		FlagBaseURL = defaultBaseURL
+	}
+	if FlagLogLevel == "" {
+		FlagLogLevel = defaultLogLevel
 	}
 }
