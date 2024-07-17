@@ -5,15 +5,17 @@ import "flag"
 var AppRunServerAddressFromFlag string
 var RedirectAddressFromFlag string
 
+const defaultAddr = "localhost:8080"
+
 func ParseFlags() {
-	flag.StringVar(&AppRunServerAddressFromFlag, "a", "localhost:8080", "Address to listen for incoming requests")
-	flag.StringVar(&RedirectAddressFromFlag, "b", "http://localhost:8080", "Address to redirect")
+	flag.StringVar(&AppRunServerAddressFromFlag, "a", defaultAddr, "Address to listen for incoming requests")
+	flag.StringVar(&RedirectAddressFromFlag, "b", defaultAddr, "Address to redirect")
 	flag.Parse()
 
 	if AppRunServerAddressFromFlag == "" {
-		AppRunServerAddressFromFlag = "localhost:8080"
+		AppRunServerAddressFromFlag = defaultAddr
 	}
 	if RedirectAddressFromFlag == "" {
-		RedirectAddressFromFlag = "http://localhost:8080"
+		RedirectAddressFromFlag = defaultAddr
 	}
 }
