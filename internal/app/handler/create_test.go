@@ -109,7 +109,7 @@ func TestCreateHandler_ServeHTTP(t *testing.T) {
 			tt.storage.EXPECT().Save(tt.want.url).Return(nil, errors.New("error while saving url"))
 		}
 
-		handler := NewCreateHandler(tt.storage, tt.shortener, config.Config{RedirectServerAddress: "http://localhost:8080"})
+		handler := NewCreateHandler(tt.storage, tt.shortener, config.Config{BaseUrl: "http://localhost:8080"})
 
 		req, err := http.NewRequest(tt.method, "http://localhost:8080", strings.NewReader(tt.body))
 		if err != nil {

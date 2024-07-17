@@ -17,13 +17,7 @@ func main() {
 	createHandler := h.NewCreateHandler(storage, shortener, *cfg)
 	redirectHandler := h.NewRedirectHandler(storage)
 
-	if cfg.RedirectServerAddress == cfg.AppRunServerAddress {
-		startGeneralServer(createHandler, redirectHandler, cfg.RedirectServerAddress)
-	} else {
-		go startAppServer(createHandler, cfg.AppRunServerAddress)
-		go startRedirectServer(redirectHandler, cfg.RedirectServerAddress)
-		select {}
-	}
+	startGeneralServer(createHandler, redirectHandler, cfg.ServerAddress)
 }
 
 func startAppServer(createHandler *h.CreateHandler, address string) {

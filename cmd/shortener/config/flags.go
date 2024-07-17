@@ -2,20 +2,21 @@ package config
 
 import "flag"
 
-var AppRunServerAddressFromFlag string
-var RedirectAddressFromFlag string
+var ServerAddressFromFlag string
+var BaseUrlFromFlag string
 
-const defaultAddr = "http://localhost:8080"
+const defaultServerAddress = "localhost:8080"
+const defaultBaseUrl = "http://localhost:8080"
 
 func ParseFlags() {
-	flag.StringVar(&AppRunServerAddressFromFlag, "a", defaultAddr, "Address to listen for incoming requests")
-	flag.StringVar(&RedirectAddressFromFlag, "b", defaultAddr, "Address to redirect")
+	flag.StringVar(&ServerAddressFromFlag, "a", defaultServerAddress, "Server address")
+	flag.StringVar(&BaseUrlFromFlag, "b", defaultBaseUrl, "Base url before shortened url")
 	flag.Parse()
 
-	if AppRunServerAddressFromFlag == "" {
-		AppRunServerAddressFromFlag = defaultAddr
+	if ServerAddressFromFlag == "" {
+		ServerAddressFromFlag = defaultServerAddress
 	}
-	if RedirectAddressFromFlag == "" {
-		RedirectAddressFromFlag = defaultAddr
+	if BaseUrlFromFlag == "" {
+		BaseUrlFromFlag = defaultBaseUrl
 	}
 }

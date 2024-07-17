@@ -3,17 +3,17 @@ package config
 import "os"
 
 type Config struct {
-	AppRunServerAddress   string
-	RedirectServerAddress string
+	ServerAddress string
+	BaseUrl       string
 }
 
 func Configure() *Config {
 	ParseFlags()
-	appRunServerAddress := getEnvOrDefault("SERVER_ADDRESS", AppRunServerAddressFromFlag)
-	redirectAddress := getEnvOrDefault("BASE_URL", RedirectAddressFromFlag)
+	serverAddress := getEnvOrDefault("SERVER_ADDRESS", ServerAddressFromFlag)
+	baseUrl := getEnvOrDefault("BASE_URL", BaseUrlFromFlag)
 	return &Config{
-		AppRunServerAddress:   appRunServerAddress,
-		RedirectServerAddress: redirectAddress,
+		ServerAddress: serverAddress,
+		BaseUrl:       baseUrl,
 	}
 }
 

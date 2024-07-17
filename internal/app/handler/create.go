@@ -38,7 +38,7 @@ func (h CreateHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusBadRequest)
 		return
 	}
-	URL := m.URL{ID: hash, OriginalURL: originalURL, ShortURL: h.cfg.RedirectServerAddress + "/" + hash}
+	URL := m.URL{ID: hash, OriginalURL: originalURL, ShortURL: h.cfg.BaseUrl + "/" + hash}
 
 	var savedURL *m.URL
 	savedURL, err = h.storage.Save(URL)
