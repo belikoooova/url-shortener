@@ -4,16 +4,16 @@ import "os"
 
 type Config struct {
 	ServerAddress string
-	BaseUrl       string
+	BaseURL       string
 }
 
 func Configure() *Config {
 	ParseFlags()
 	serverAddress := getEnvOrDefault("SERVER_ADDRESS", ServerAddressFromFlag)
-	baseUrl := getEnvOrDefault("BASE_URL", BaseUrlFromFlag)
+	baseUrl := getEnvOrDefault("BASE_URL", BaseURLFromFlag)
 	return &Config{
 		ServerAddress: serverAddress,
-		BaseUrl:       baseUrl,
+		BaseURL:       baseUrl,
 	}
 }
 
