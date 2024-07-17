@@ -11,9 +11,9 @@ func ParseFlags() {
 	flag.Parse()
 
 	if AppRunServerAddressFromFlag == "" {
-		AppRunServerAddressFromFlag = ":8080"
+		AppRunServerAddressFromFlag = "localhost:8080"
 	}
 	if RedirectAddressFromFlag == "" {
-		RedirectAddressFromFlag = ":8080"
+		RedirectAddressFromFlag = "http://localhost:8080"
 	}
 }
