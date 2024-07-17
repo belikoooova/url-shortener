@@ -47,7 +47,7 @@ func TestCreateHandler_ServeHTTP(t *testing.T) {
 				code: http.StatusCreated,
 				url: model.URL{
 					OriginalURL: "http://example.com/long",
-					ShortURL:    "localhost:8080/short",
+					ShortURL:    "http://localhost:8080/short",
 					ID:          "short",
 				},
 			},
@@ -90,7 +90,7 @@ func TestCreateHandler_ServeHTTP(t *testing.T) {
 				code: http.StatusConflict,
 				url: model.URL{
 					OriginalURL: "http://example.com/long",
-					ShortURL:    "localhost:8080/short",
+					ShortURL:    "http://localhost:8080/short",
 					ID:          "short",
 				},
 			},
@@ -109,7 +109,7 @@ func TestCreateHandler_ServeHTTP(t *testing.T) {
 			tt.storage.EXPECT().Save(tt.want.url).Return(nil, errors.New("error while saving url"))
 		}
 
-		handler := NewCreateHandler(tt.storage, tt.shortener, config.Config{RedirectServerAddress: "localhost:8080"})
+		handler := NewCreateHandler(tt.storage, tt.shortener, config.Config{BaseURL: "http://localhost:8080"})
 
 		req, err := http.NewRequest(tt.method, "http://localhost:8080", strings.NewReader(tt.body))
 		if err != nil {

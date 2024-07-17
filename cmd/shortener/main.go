@@ -10,35 +10,21 @@ import (
 )
 
 func main() {
-	config.ParseFlags()
-	cfg := config.Config{
-		AppRunServerAddress:   config.AppRunAddress,
-		RedirectServerAddress: config.RedirectAddress,
-	}
+	cfg := config.Configure()
 	var shortener short.Shortener = short.NewSha256WithBase58Shortener()
 	var storage stor.Storage = stor.NewInMemoryStorage()
 
-	go startAppServer(&storage, &shortener, &cfg)
-	go startRedirectServer(&storage, &cfg)
+	createHandler := h.NewCreateHandler(storage, shortener, *cfg)
+	redirectHandler := h.NewRedirectHandler(storage)
 
-	select {}
+	startGeneralServer(createHandler, redirectHandler, cfg.ServerAddress)
 }
 
-func startAppServer(storage *stor.Storage, shortener *short.Shortener, cfg *config.Config) {
-	createHandler := h.NewCreateHandler(*storage, *shortener, *cfg)
-	appRouter := chi.NewRouter()
-	appRouter.Post("/", createHandler.ServeHTTP)
-	err := http.ListenAndServe(cfg.AppRunServerAddress, appRouter)
-	if err != nil {
-		panic(err)
-	}
-}
-
-func startRedirectServer(storage *stor.Storage, cfg *config.Config) {
-	redirectHandler := h.NewRedirectHandler(*storage)
-	redirectRouter := chi.NewRouter()
-	redirectRouter.Get("/{id}", redirectHandler.ServeHTTP)
-	err := http.ListenAndServe(cfg.RedirectServerAddress, redirectRouter)
+func startGeneralServer(createHandler *h.CreateHandler, redirectHandler *h.RedirectHandler, address string) {
+	router := chi.NewRouter()
+	router.Post("/", createHandler.ServeHTTP)
+	router.Get("/{id}", redirectHandler.ServeHTTP)
+	err := http.ListenAndServe(address, router)
 	if err != nil {
 		panic(err)
 	}
