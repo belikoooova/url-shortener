@@ -1,6 +1,6 @@
 package model
 
-const BaseURL = "http://localhost"
+const BaseURL = "http://172.17.0.1"
 
 type URL struct {
 	ID          string `json:"id"`
