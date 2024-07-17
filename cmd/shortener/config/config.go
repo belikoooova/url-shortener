@@ -10,10 +10,10 @@ type Config struct {
 func Configure() *Config {
 	ParseFlags()
 	serverAddress := getEnvOrDefault("SERVER_ADDRESS", ServerAddressFromFlag)
-	baseUrl := getEnvOrDefault("BASE_URL", BaseURLFromFlag)
+	baseURL := getEnvOrDefault("BASE_URL", BaseURLFromFlag)
 	return &Config{
 		ServerAddress: serverAddress,
-		BaseURL:       baseUrl,
+		BaseURL:       baseURL,
 	}
 }
 
